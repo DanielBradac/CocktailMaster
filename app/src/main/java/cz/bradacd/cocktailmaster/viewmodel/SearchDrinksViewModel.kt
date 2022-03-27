@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.bradacd.cocktailmaster.datasource.network.CocktailApi
 import cz.bradacd.cocktailmaster.datasource.network.mapping.Drink
+import cz.bradacd.cocktailmaster.datasource.network.mapping.Drinks
 import kotlinx.coroutines.*
 import java.lang.Exception
+import kotlin.math.log
 
 class SearchDrinksViewModel: ViewModel() {
 
@@ -17,7 +19,9 @@ class SearchDrinksViewModel: ViewModel() {
     val drinks = _drinks
 
     val status = MutableLiveData<String>()
+    val apiAvailable = testApiAvailable()
 
+    // Handle possible error inside retrofit - catch block wouldn't get it
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
         Log.e(logTag, throwable.stackTraceToString())
         status.value = throwable.stackTraceToString()
@@ -28,7 +32,6 @@ class SearchDrinksViewModel: ViewModel() {
         viewModelScope.launch(coroutineExceptionHandler) {
             try {
                 // Network call - no need to switch Dispatchers, Retrofit will do that itself
-                    // TODO zkusit si zalogovat kde je jaké vlákno
                 val fetchedDrinks = CocktailApi.fetchDrinksByName(name)
 
                 _drinks.value = fetchedDrinks
@@ -43,12 +46,16 @@ class SearchDrinksViewModel: ViewModel() {
                 }
 
             } catch (e: Exception) {
-                // TODO otestovat co se stane, když tohle reálně vypadne - spadne to do coroutineExceptionHandler?
                 if (e is CancellationException) {
                     throw e
                 }
                 status.value = "Error: ${e.message}"
             }
         }
+    }
+
+    // TODO
+    fun testApiAvailable(): Boolean {
+        return true
     }
 }

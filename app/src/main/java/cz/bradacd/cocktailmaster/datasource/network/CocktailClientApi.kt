@@ -1,5 +1,6 @@
 package cz.bradacd.cocktailmaster.datasource.network
 
+import android.util.Log
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import cz.bradacd.cocktailmaster.datasource.network.mapping.Drink
@@ -31,7 +32,6 @@ object CocktailApi {
     }
 
     suspend fun fetchDrinksByName(name: String): List<Drink> {
-        delay(2000)
         return retrofitService.getDrinksByName(name).drinks
     }
 }
