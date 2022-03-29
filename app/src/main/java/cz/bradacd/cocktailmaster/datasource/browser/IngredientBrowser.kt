@@ -1,8 +1,8 @@
 package cz.bradacd.cocktailmaster.datasource.browser
 
-import cz.bradacd.cocktailmaster.datasource.containers.DisplayableDrink
+import cz.bradacd.cocktailmaster.datasource.containers.DisplayableIngredient
 
-// Cocktail has multiple possible sources, each has its own browser implementation
+// Cocktail ingredient has multiple possible sources, each has its own browser implementation
 interface IngredientBrowser {
-    suspend fun getIngredientsByName(name: String): DisplayableDrink
+    suspend fun getIngredientsByName(name: String): List<DisplayableIngredient>
 }

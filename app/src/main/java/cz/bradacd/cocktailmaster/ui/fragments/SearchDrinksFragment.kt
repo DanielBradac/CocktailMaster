@@ -34,7 +34,7 @@ class SearchDrinksFragment : Fragment() {
             searchButton.setOnClickListener {navigateToSearchRes()}
         }
 
-        //viewModel.getDrinksByName("artini")
+        viewModel.getDrinksByName("artini")
         return binding.root
     }
 

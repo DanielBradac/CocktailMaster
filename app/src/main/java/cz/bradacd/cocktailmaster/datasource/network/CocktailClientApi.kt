@@ -5,6 +5,8 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import cz.bradacd.cocktailmaster.datasource.network.mapping.Drink
 import cz.bradacd.cocktailmaster.datasource.network.mapping.Drinks
+import cz.bradacd.cocktailmaster.datasource.network.mapping.Ingredient
+import cz.bradacd.cocktailmaster.datasource.network.mapping.Ingredients
 import kotlinx.coroutines.delay
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -15,6 +17,9 @@ import retrofit2.http.Query
 interface CocktailApiCalls {
     @GET(APIConstants.SEARCH)
     suspend fun getDrinksByName(@Query("s") name: String): Drinks
+
+    @GET(APIConstants.SEARCH)
+    suspend fun getIngredientByName(@Query("i") name: String): Ingredients
 }
 
 object CocktailApi {
@@ -33,5 +38,9 @@ object CocktailApi {
 
     suspend fun fetchDrinksByName(name: String): List<Drink> {
         return retrofitService.getDrinksByName(name).drinks
+    }
+
+    suspend fun fetchIngredientsByName(name: String): List<Ingredient> {
+        return retrofitService.getIngredientByName(name).ingredient
     }
 }
