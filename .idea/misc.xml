@@ -3,9 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Melou/AndroidStudioProjects/CocktailMaster/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2115" />
+        <entry key="..\:/Users/Melou/AndroidStudioProjects/CocktailMaster/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2115" />
         <entry key="..\:/Users/Melou/AndroidStudioProjects/CocktailMaster/app/src/main/res/drawable/remove_ingredient.xml" value="0.1555" />
         <entry key="..\:/Users/Melou/AndroidStudioProjects/CocktailMaster/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Melou/AndroidStudioProjects/CocktailMaster/app/src/main/res/layout/added_ingredients_list.xml" value="0.2984375" />
+        <entry key="..\:/Users/Melou/AndroidStudioProjects/CocktailMaster/app/src/main/res/layout/added_ingredients_list.xml" value="0.1" />
         <entry key="..\:/Users/Melou/AndroidStudioProjects/CocktailMaster/app/src/main/res/layout/fragment_search_drinks.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Melou/AndroidStudioProjects/CocktailMaster/app/src/main/res/layout/fragment_search_result.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Melou/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_dropdown_item_1line.xml" value="0.2984375" />

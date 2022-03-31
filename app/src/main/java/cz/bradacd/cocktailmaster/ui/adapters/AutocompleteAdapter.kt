@@ -27,8 +27,8 @@ class AddedIngredientAdapter (
             ingredientText.text = addedIngredients[position]
             // Remove item
             removeIngredientBtn.setOnClickListener {
-                addedIngredients.removeAt(position)
-                this@AddedIngredientAdapter.notifyItemRemoved(position)
+                addedIngredients.removeAt(adapterPosition)
+                this@AddedIngredientAdapter.notifyItemRemoved(adapterPosition)
             }
         }
     }
