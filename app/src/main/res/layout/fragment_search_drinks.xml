@@ -78,10 +78,10 @@
             android:id="@+id/add_ingredients_autocomplete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:completionThreshold="1"
+            android:completionThreshold="2"
             android:hint="Ingredient"
             app:layout_constraintStart_toStartOf="@+id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/added_ingredients_rw" />
+            app:layout_constraintTop_toBottomOf="@+id/cocktail_name" />
 
 
         <Button
@@ -101,15 +101,14 @@
             android:layout_marginStart="32dp"
             android:text="Add"
             app:layout_constraintStart_toEndOf="@+id/add_ingredients_autocomplete"
-            app:layout_constraintTop_toBottomOf="@+id/added_ingredients_rw" />
+            app:layout_constraintTop_toBottomOf="@+id/cocktail_name" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/added_ingredients_rw"
             android:layout_width="300dp"
             android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/cocktail_name" />
+            app:layout_constraintTop_toBottomOf="@+id/add_ingredients_autocomplete" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

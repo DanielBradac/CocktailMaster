@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import cz.bradacd.cocktailmaster.R
@@ -24,6 +25,11 @@ class AddedIngredientAdapter (
         Log.d(logTag, "I now have ${addedIngredients.size} items")
         holder.apply {
             ingredientText.text = addedIngredients[position]
+            // Remove item
+            removeIngredientBtn.setOnClickListener {
+                addedIngredients.removeAt(position)
+                this@AddedIngredientAdapter.notifyItemRemoved(position)
+            }
         }
     }
 
@@ -31,5 +37,6 @@ class AddedIngredientAdapter (
 
     class ItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val ingredientText: TextView = view.findViewById(R.id.added_ingredient)
+        val removeIngredientBtn: ImageButton = view.findViewById(R.id.remove_ingredient)
     }
 }
