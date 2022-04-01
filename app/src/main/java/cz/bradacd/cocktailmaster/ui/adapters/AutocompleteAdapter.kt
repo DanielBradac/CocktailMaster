@@ -15,14 +15,12 @@ class AddedIngredientAdapter (
 
     val logTag = "AddedIngredientAdapterLog"
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        Log.d(logTag, "I now have ${addedIngredients.size} items")
         val adapterLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.added_ingredients_list, parent, false)
         return ItemViewHolder(adapterLayout)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        Log.d(logTag, "I now have ${addedIngredients.size} items")
         holder.apply {
             ingredientText.text = addedIngredients[position]
             // Remove item

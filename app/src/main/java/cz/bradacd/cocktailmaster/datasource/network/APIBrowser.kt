@@ -6,7 +6,6 @@ import cz.bradacd.cocktailmaster.datasource.browser.IngredientBrowser
 import cz.bradacd.cocktailmaster.datasource.containers.DisplayableDrink
 import cz.bradacd.cocktailmaster.datasource.containers.DisplayableIngredient
 import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.delay
 
 val logTag = "CocktailAPIBrowserLog"
 
@@ -15,8 +14,6 @@ class CocktailAPIBrowser: CocktailBrowser, IngredientBrowser {
 
 
     override suspend fun getDrinksByName(name: String): List<DisplayableDrink> {
-        delay(1000)
-        Log.d(logTag, "I am fast and working from ctx: ${currentCoroutineContext()} and thread: ${Thread.currentThread().name}")
         return CocktailApi.fetchDrinksByName(name).map {
             DisplayableDrink(
                 it.idDrink,

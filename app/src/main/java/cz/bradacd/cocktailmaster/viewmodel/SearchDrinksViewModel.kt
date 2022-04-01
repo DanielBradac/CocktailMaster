@@ -1,6 +1,7 @@
 package cz.bradacd.cocktailmaster.viewmodel
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,10 +19,12 @@ class SearchDrinksViewModel: ViewModel() {
     private var _drinks = MutableLiveData<List<DisplayableDrink>>()
     val drinks = _drinks
 
-    private var _ingredientSuggestion = MutableLiveData<List<DisplayableIngredient>>()
+    private var _ingredientSuggestion = MutableLiveData<List<String>>()
     val ingredientSuggestion = _ingredientSuggestion
 
-    val status = MutableLiveData<String>()
+    private var _progressBarVisibility = MutableLiveData(View.GONE)
+    val progressBarVisibility = _progressBarVisibility
+
     val apiAvailable = CocktailAPIBrowser.testApi()
 
     private val dataCollector: MultipleSourceDataCollector
@@ -34,20 +37,25 @@ class SearchDrinksViewModel: ViewModel() {
     // Handle possible error inside retrofit - catch block wouldn't get it
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
         Log.e(logTag, throwable.stackTraceToString())
-        status.value = throwable.stackTraceToString()
     }
 
-    fun getIngredientsByName(name: String) {
+    fun updateSuggestionList(name: String) {
+        _progressBarVisibility.value = View.VISIBLE
         viewModelScope.launch(coroutineExceptionHandler) {
             try {
-                val fetchedIngredients = dataCollector.collectIngredientsByName(name)
-                _ingredientSuggestion.value = fetchedIngredients.sortedBy { name }
+                _ingredientSuggestion.value = dataCollector.collectIngredientsByName(name)
+                    .sortedBy { name }
+                    .map { it.name }
             } catch (e: Exception) {
                 if (e is CancellationException) {
                     throw e
                 }
-                status.value = "Error: ${e.message}"
+                Log.e(logTag, e.stackTraceToString())
+            } finally {
+                _progressBarVisibility.value = View.GONE
             }
         }
     }
+
+
 }
