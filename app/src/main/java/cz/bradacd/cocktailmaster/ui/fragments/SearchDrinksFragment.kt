@@ -23,6 +23,7 @@ import cz.bradacd.cocktailmaster.viewmodel.SearchDrinksViewModel
 
 // TODO setupnout constrint layout v constraint layoutu - ten vnější bude řešit ty okraje, případně v něm bude to search tlačítko
 // TODO tím využijeme celou plochu obrazovky pro ingredience
+// TODO přidat do spinneru optional alcohol a both dát pryč
 
 class SearchDrinksFragment : Fragment() {
 

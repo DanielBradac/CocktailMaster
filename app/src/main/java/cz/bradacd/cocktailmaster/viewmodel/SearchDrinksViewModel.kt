@@ -5,9 +5,9 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cz.bradacd.cocktailmaster.common.DrinkCategory
 import cz.bradacd.cocktailmaster.datasource.browser.MultipleSourceDataCollector
-import cz.bradacd.cocktailmaster.datasource.containers.DisplayableDrink
-import cz.bradacd.cocktailmaster.datasource.containers.DisplayableIngredient
+import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink
 import cz.bradacd.cocktailmaster.datasource.network.CocktailAPIBrowser
 import kotlinx.coroutines.*
 import java.lang.Exception
@@ -46,6 +46,11 @@ class SearchDrinksViewModel: ViewModel() {
                 _ingredientSuggestion.value = dataCollector.collectIngredientsByName(name)
                     .sortedBy { name }
                     .map { it.name }
+
+
+                val test = dataCollector.collectDrinksMultipleParams(null, DrinkCategory.ALCOHOLIC, listOf("Aperol", "Prosecco"))
+                Log.d(logTag, "Final result count: ${test.size}")
+                Log.d(logTag, "${test}")
             } catch (e: Exception) {
                 if (e is CancellationException) {
                     throw e
