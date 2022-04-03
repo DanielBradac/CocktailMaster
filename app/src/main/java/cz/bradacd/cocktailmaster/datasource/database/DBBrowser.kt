@@ -20,6 +20,10 @@ class DBBrowser: Browser {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getDrinkDetail(id: String): DisplayableDrinkDetail? {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getDrinksMultipleParams(
         name: String?,
         category: DrinkCategory?,

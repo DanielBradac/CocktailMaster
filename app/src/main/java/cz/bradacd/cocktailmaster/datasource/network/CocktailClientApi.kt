@@ -22,7 +22,10 @@ interface CocktailApiCalls {
     suspend fun getDrinksByIngredientName(@Query("i") name: String): Drinks
 
     @GET(APIConstants.FILTER)
-    suspend fun getDrinksByCategory(@Query("a") name: String): Drinks
+    suspend fun getDrinksByCategory(@Query("a") category: String): Drinks
+
+    @GET(APIConstants.LOOKUP)
+    suspend fun getDrinkDetail(@Query("i") id: String): DrinksDetailed
 }
 
 object CocktailApi {
@@ -61,11 +64,17 @@ object CocktailApi {
 
     suspend fun fetchDrinksByIngredient(ingredientName: String): List<Drink> {
         val drinks = retrofitService.getDrinksByIngredientName(ingredientName).drinks
-        Log.d("SearchDrinksViewModelLog", "I fetched by ingredient $ingredientName ${drinks.size}")
-        Log.d("SearchDrinksViewModelLog", "Result: $drinks")
         if (drinks.isNullOrEmpty()) {
             return emptyList()
         }
         return drinks
+    }
+
+    suspend fun fetchDrinkDetailById(drinkId: String): DetailedDrink? {
+        val drinks = retrofitService.getDrinkDetail(drinkId).drinks
+        if (drinks.isNullOrEmpty()) {
+            return null
+        }
+        return drinks[0]
     }
 }

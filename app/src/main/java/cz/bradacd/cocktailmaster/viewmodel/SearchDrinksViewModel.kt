@@ -48,7 +48,8 @@ class SearchDrinksViewModel: ViewModel() {
                     .map { it.name }
 
 
-                val test = dataCollector.collectDrinksMultipleParams(null, DrinkCategory.ALCOHOLIC, listOf("Aperol", "Prosecco"))
+                val test = dataCollector
+                    .collectDrinksMultipleParams(null, DrinkCategory.NONALCOHOLIC, listOf("Honey", "Strawberries"))
                 Log.d(logTag, "Final result count: ${test.size}")
                 Log.d(logTag, "${test}")
             } catch (e: Exception) {

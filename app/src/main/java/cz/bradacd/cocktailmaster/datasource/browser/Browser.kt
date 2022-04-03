@@ -10,6 +10,7 @@ interface Browser {
     suspend fun getDrinksByName(name: String): List<DisplayableDrinkDetail>
     suspend fun getIngredientsByName(name: String): List<DisplayableIngredient>
     suspend fun getDrinksByCategory(cat: DrinkCategory): List<DisplayableDrink>
+    suspend fun getDrinkDetail(id: String): DisplayableDrinkDetail?
     suspend fun getDrinksMultipleParams(
         name: String? = null,
         category: DrinkCategory? = null,
