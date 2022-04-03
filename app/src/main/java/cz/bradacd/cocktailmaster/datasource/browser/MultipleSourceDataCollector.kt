@@ -7,7 +7,7 @@ import kotlinx.coroutines.*
 
 // This class collects data from all the browsers it gets in constructor and merge them together
 // TODO tady se bude opakovat kód, chtělo by to nějak zobecnit
-// TODO na vhodný místa dát ensureActive()
+// TODO otestovat jak funguje ensureActive
 class MultipleSourceDataCollector(private val browsers: List<Browser>) {
     private val logTag = "DataCollector"
 
@@ -15,7 +15,10 @@ class MultipleSourceDataCollector(private val browsers: List<Browser>) {
         return coroutineScope {
             val requests = mutableListOf<Deferred<List<DisplayableIngredient>>>()
             browsers.forEach { browser ->
-                requests.add(async { browser.getIngredientsByName(name) })
+                requests.add(async {
+                    ensureActive()
+                    browser.getIngredientsByName(name)
+                })
             }
             return@coroutineScope requests.awaitAll().flatten()
         }
@@ -25,7 +28,10 @@ class MultipleSourceDataCollector(private val browsers: List<Browser>) {
         return coroutineScope {
             val requests = mutableListOf<Deferred<List<DisplayableDrink>>>()
             browsers.forEach { browser ->
-                requests.add(async { browser.getDrinksMultipleParams(name, category, ingredients) })
+                requests.add(async {
+                    ensureActive()
+                    browser.getDrinksMultipleParams(name, category, ingredients)
+                })
             }
             return@coroutineScope requests.awaitAll().flatten()
         }

@@ -12,8 +12,7 @@ import kotlinx.coroutines.*
 
 const val logTag = "CocktailAPIBrowserLog"
 
-// Tohle bude vracet všechno v displayable formě
-// TODO na vhodný místa dát ensureActive()
+// TODO otestovat jak funguje ensureActive
 class CocktailAPIBrowser : Browser {
     override suspend fun getDrinksByName(name: String): List<DisplayableDrinkDetail> =
         CocktailApi.fetchDrinksByName(name).map { it.toDisplayable() }
@@ -70,7 +69,10 @@ class CocktailAPIBrowser : Browser {
         coroutineScope {
             val requests = mutableListOf<Deferred<List<DisplayableDrink>>>()
             ingredients!!.forEach { ingredient ->
-                requests.add(async { getDrinksByIngredient(ingredient) })
+                requests.add(async {
+                    ensureActive()
+                    getDrinksByIngredient(ingredient)
+                })
             }
             requests.awaitAll().reduce { finalList, list ->
                 finalList.intersect(list).toList()
@@ -84,7 +86,10 @@ class CocktailAPIBrowser : Browser {
     ): List<DisplayableDrink> = coroutineScope {
         val detailedRequests = mutableListOf<Deferred<DisplayableDrinkDetail?>>()
         drinks.forEach { drink ->
-            detailedRequests.add(async { getDrinkDetail(drink.id) })
+            detailedRequests.add(async {
+                ensureActive()
+                getDrinkDetail(drink.id)
+            })
         }
         val filteredDetails = detailedRequests.awaitAll().filter { drinkDetail ->
             drinkDetail != null && drinkDetail.category == category
