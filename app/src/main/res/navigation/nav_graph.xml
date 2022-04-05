@@ -10,7 +10,28 @@
         android:label="SearchDrinksFragment" >
         <action
             android:id="@+id/action_searchDrinksFragment_to_searchResultFragment"
-            app:destination="@id/searchResultFragment" />
+            app:destination="@id/searchResultFragment">
+
+            <argument
+                android:name="drinkCategory"
+                app:argType="cz.bradacd.cocktailmaster.common.DrinkCategory" />
+            <argument
+                android:name="drinkName"
+                app:argType="string"
+                android:defaultValue=""/>
+            <argument
+                android:name="ingredients"
+                app:argType="string[]" />
+            <argument
+                android:name="searchOnline"
+                app:argType="boolean"
+                android:defaultValue="false"/>
+            <argument
+                android:name="SearchLocal"
+                app:argType="boolean"
+                android:defaultValue="false"/>
+
+        </action>
     </fragment>
     <fragment
         android:id="@+id/searchResultFragment"
