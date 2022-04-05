@@ -4,11 +4,4 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="enter_cocktail_name">Cocktail name</string>
     <string name="search_button_text">Search</string>
-
-    <string-array name="drink_types_search">
-        <item name="alc_option">Alcoholic</item>
-        <item name="nonalc_option">Non-Alcoholic</item>
-        <item name="both_option">Both</item>
-    </string-array>
-
 </resources>

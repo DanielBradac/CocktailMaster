@@ -1,6 +1,5 @@
 package cz.bradacd.cocktailmaster.ui.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,7 @@ class AddedIngredientAdapter (
     val logTag = "AddedIngredientAdapterLog"
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val adapterLayout = LayoutInflater.from(parent.context)
-            .inflate(R.layout.added_ingredients_list, parent, false)
+            .inflate(R.layout.added_ingredients_list_item, parent, false)
         return ItemViewHolder(adapterLayout)
     }
 

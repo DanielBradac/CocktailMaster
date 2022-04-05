@@ -35,6 +35,7 @@ class SearchDrinksViewModel: ViewModel() {
     }
 
     // Handle possible error inside retrofit - catch block wouldn't get it
+    // TODO vyrobit si nějaký error handeling na tyhle případy
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
         Log.e(logTag, throwable.stackTraceToString())
     }
@@ -46,12 +47,6 @@ class SearchDrinksViewModel: ViewModel() {
                 _ingredientSuggestion.value = dataCollector.collectIngredientsByName(name)
                     .sortedBy { name }
                     .map { it.name }
-
-
-                val test = dataCollector
-                    .collectDrinksMultipleParams(null, DrinkCategory.NONALCOHOLIC, listOf("Honey", "Strawberries"))
-                Log.d(logTag, "Final result count: ${test.size}")
-                Log.d(logTag, "${test}")
             } catch (e: Exception) {
                 if (e is CancellationException) {
                     throw e
@@ -62,6 +57,4 @@ class SearchDrinksViewModel: ViewModel() {
             }
         }
     }
-
-
 }

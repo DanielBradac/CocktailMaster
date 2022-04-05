@@ -17,11 +17,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.textview.MaterialTextView
 import cz.bradacd.cocktailmaster.R
+import cz.bradacd.cocktailmaster.common.DrinkCategory
 import cz.bradacd.cocktailmaster.databinding.FragmentSearchDrinksBinding
 import cz.bradacd.cocktailmaster.ui.adapters.AddedIngredientAdapter
 import cz.bradacd.cocktailmaster.viewmodel.SearchDrinksViewModel
 
 // TODO setupnout constrint layout v constraint layoutu - ten vnější bude řešit ty okraje, případně v něm bude to search tlačítko
+// TODO - případně se dá řešit pomocí android:layout_margin
 // TODO tím využijeme celou plochu obrazovky pro ingredience
 // TODO přidat do spinneru optional alcohol a both dát pryč
 
@@ -40,7 +42,7 @@ class SearchDrinksFragment : Fragment() {
         binding = FragmentSearchDrinksBinding.inflate(inflater)
 
         binding.apply {
-            lifecycleOwner = this@SearchDrinksFragment
+            lifecycleOwner = viewLifecycleOwner
             viewModel = this@SearchDrinksFragment.viewModel
 
             // Adapters setup
@@ -51,8 +53,15 @@ class SearchDrinksFragment : Fragment() {
             addedIngredientsRw.layoutManager =
                 GridLayoutManager(this@SearchDrinksFragment.requireContext(), 2)
 
+            drinkTypeSpinner.adapter =
+                ArrayAdapter(
+                    this@SearchDrinksFragment.requireContext(),
+                    R.layout.spinner_item,
+                    DrinkCategory.values()
+                )
+
             // Listeners setup
-            searchButton.setOnClickListener {navigateToSearchRes()}
+            searchButton.setOnClickListener { navigateToSearchRes() }
             addIngredientsAutocomplete.addTextChangedListener(createTextWatcher())
             addIngredientsAutocomplete.onItemClickListener =
                 AdapterView.OnItemClickListener { _, clickedView, _, _ ->
@@ -83,7 +92,17 @@ class SearchDrinksFragment : Fragment() {
     }
 
     private fun navigateToSearchRes() {
-        findNavController().navigate(R.id.action_searchDrinksFragment_to_searchResultFragment)
+        with(binding) {
+            val action =
+                SearchDrinksFragmentDirections.actionSearchDrinksFragmentToSearchResultFragment(
+                    drinkTypeSpinner.selectedItem.toString(),
+                    cocktailNameText.text.toString(),
+                    addedIngredientsList.toTypedArray(),
+                    localSwitch.isChecked,
+                    onlineSwitch.isChecked
+                )
+            findNavController().navigate(action)
+        }
     }
 
     private fun createAutocompleteAdapter(): ArrayAdapter<String> =
@@ -94,28 +113,30 @@ class SearchDrinksFragment : Fragment() {
         )
 
     private fun addIngredient(ingredientText: String) {
-        with (binding) {
+        with(binding) {
             addedIngredientsList.add(ingredientText)
             addedIngredientsRw.adapter!!.notifyItemInserted(addedIngredientsList.size - 1)
             addIngredientsAutocomplete.setText("")
         }
     }
 
-    private fun createTextWatcher() = object: TextWatcher {
+    private fun createTextWatcher() = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             val ingredientAlreadyFetched =
                 viewModel.ingredientSuggestion.value != null &&
-                viewModel.ingredientSuggestion.value is List<String> &&
-                viewModel.ingredientSuggestion.value!!.contains(s.toString())
+                        viewModel.ingredientSuggestion.value is List<String> &&
+                        viewModel.ingredientSuggestion.value!!.contains(s.toString())
 
             if (!s.isNullOrBlank() &&
                 s.length >= binding.addIngredientsAutocomplete.threshold &&
-                !ingredientAlreadyFetched) {
+                !ingredientAlreadyFetched
+            ) {
                 viewModel.updateSuggestionList(s.toString())
             } else {
                 binding.addIngredientsAutocomplete.error = null
             }
         }
+
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     }
