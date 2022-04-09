@@ -2,6 +2,7 @@ package cz.bradacd.cocktailmaster.datasource.network.mapping
 
 import android.util.Log
 import cz.bradacd.cocktailmaster.common.DrinkCategory
+import cz.bradacd.cocktailmaster.common.getCategoryByApiName
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrinkDetail
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableIngredient
@@ -26,17 +27,10 @@ fun DetailedDrink.toDisplayable(source: String): DisplayableDrinkDetail {
     if (!strIngredient14.isNullOrBlank() && !strMeasure14.isNullOrBlank()) ingMap[strIngredient14] = strMeasure14
     if (!strIngredient15.isNullOrBlank() && !strMeasure15.isNullOrBlank()) ingMap[strIngredient15] = strMeasure15
 
-    val category = when(strAlcoholic) {
-        DrinkCategory.ALCOHOLIC.apiName -> DrinkCategory.ALCOHOLIC
-        DrinkCategory.NONALCOHOLIC.apiName -> DrinkCategory.NONALCOHOLIC
-        DrinkCategory.OPTALCOHOL.apiName -> DrinkCategory.OPTALCOHOL
-        else -> null
-    }
-
     return DisplayableDrinkDetail(
         id = idDrink,
         name = strDrink,
-        category = category,
+        category = getCategoryByApiName(strAlcoholic),
         videoSrc = strVideo,
         instructions = strInstructions,
         thumbImgSrc = strDrinkThumb,

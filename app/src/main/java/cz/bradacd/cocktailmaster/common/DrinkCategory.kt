@@ -7,3 +7,12 @@ enum class DrinkCategory(val apiName: String) {
 
     override fun toString(): String = apiName
 }
+
+fun getCategoryByApiName(apiName: String): DrinkCategory? {
+    return when(apiName) {
+        DrinkCategory.ALCOHOLIC.apiName -> DrinkCategory.ALCOHOLIC
+        DrinkCategory.NONALCOHOLIC.apiName -> DrinkCategory.NONALCOHOLIC
+        DrinkCategory.OPTALCOHOL.apiName -> DrinkCategory.OPTALCOHOL
+        else -> null
+    }
+}
