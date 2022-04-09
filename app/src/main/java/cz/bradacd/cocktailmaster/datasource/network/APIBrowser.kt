@@ -14,20 +14,22 @@ const val logTag = "CocktailAPIBrowserLog"
 
 // TODO otestovat jak funguje ensureActive
 class CocktailAPIBrowser : Browser {
+    override val sourceTag = "cocktailAPI"
+
     override suspend fun getDrinksByName(name: String): List<DisplayableDrinkDetail> =
-        CocktailApi.fetchDrinksByName(name).map { it.toDisplayable() }
+        CocktailApi.fetchDrinksByName(name).map { it.toDisplayable(sourceTag) }
 
     override suspend fun getIngredientsByName(name: String): List<DisplayableIngredient> =
-        CocktailApi.fetchIngredientsByName(name).map { it.toDisplayable() }
+        CocktailApi.fetchIngredientsByName(name).map { it.toDisplayable(sourceTag) }
 
     override suspend fun getDrinksByCategory(cat: DrinkCategory): List<DisplayableDrink> =
-        CocktailApi.fetchIngredientsByCategory(cat).map { it.toDisplayable() }
+        CocktailApi.fetchIngredientsByCategory(cat).map { it.toDisplayable(sourceTag) }
 
     private suspend fun getDrinksByIngredient(ingredientName: String): List<DisplayableDrink> =
-        CocktailApi.fetchDrinksByIngredient(ingredientName).map { it.toDisplayable() }
+        CocktailApi.fetchDrinksByIngredient(ingredientName).map { it.toDisplayable(sourceTag) }
 
     override suspend fun getDrinkDetail(id: String): DisplayableDrinkDetail? =
-        CocktailApi.fetchDrinkDetailById(id)?.toDisplayable()
+        CocktailApi.fetchDrinkDetailById(id)?.toDisplayable(sourceTag)
 
     // TODO otestovat si coroutiny ve stylu výpis vláken, delay, atd..
     override suspend fun getDrinksMultipleParams(
@@ -62,7 +64,7 @@ class CocktailAPIBrowser : Browser {
         ingredients: List<String>?
     ): List<DisplayableDrink> = getDrinksByName(name)
         .filter { it.satisfiesParams(category, ingredients.orEmpty()) }
-        .map { DisplayableDrink(it.id, it.name, it.thumbImgSrc) }
+        .map { DisplayableDrink(sourceTag, it.id, it.name, it.thumbImgSrc) }
 
     // Calls all drinks with each ingredient and than intersect the results
     private suspend fun filterByIngredients(ingredients: List<String>?): List<DisplayableDrink> =

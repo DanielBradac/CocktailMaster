@@ -92,6 +92,7 @@ class SearchDrinksFragment : Fragment() {
     }
 
     private fun navigateToSearchRes() {
+
         with(binding) {
             val action =
                 SearchDrinksFragmentDirections.actionSearchDrinksFragmentToSearchResultFragment(

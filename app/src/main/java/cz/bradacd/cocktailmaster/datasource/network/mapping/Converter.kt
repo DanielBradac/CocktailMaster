@@ -8,7 +8,7 @@ import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableIngredient
 
 // Functions that convert to displayable form
 
-fun DetailedDrink.toDisplayable(): DisplayableDrinkDetail {
+fun DetailedDrink.toDisplayable(source: String): DisplayableDrinkDetail {
     val ingMap = HashMap<String, String>()
     if (!strIngredient1.isNullOrBlank() && !strMeasure1.isNullOrBlank()) ingMap[strIngredient1] = strMeasure1
     if (!strIngredient2.isNullOrBlank() && !strMeasure2.isNullOrBlank()) ingMap[strIngredient2] = strMeasure2
@@ -40,18 +40,21 @@ fun DetailedDrink.toDisplayable(): DisplayableDrinkDetail {
         videoSrc = strVideo,
         instructions = strInstructions,
         thumbImgSrc = strDrinkThumb,
-        ingredients = ingMap
+        ingredients = ingMap,
+        source = source
     )
 }
 
-fun Drink.toDisplayable(): DisplayableDrink = DisplayableDrink(
+fun Drink.toDisplayable(source: String): DisplayableDrink = DisplayableDrink(
         id = idDrink,
         name = strDrink,
-        thumbImgSrc = strDrinkThumb
+        thumbImgSrc = strDrinkThumb,
+        source = source
     )
 
-fun Ingredient.toDisplayable(): DisplayableIngredient = DisplayableIngredient(
+fun Ingredient.toDisplayable(source: String): DisplayableIngredient = DisplayableIngredient(
     id = idIngredient,
-    name = strIngredient
+    name = strIngredient,
+    source = source
 )
 

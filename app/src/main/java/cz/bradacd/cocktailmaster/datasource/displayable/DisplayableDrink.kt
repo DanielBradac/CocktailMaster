@@ -1,6 +1,7 @@
 package cz.bradacd.cocktailmaster.datasource.displayable
 
 data class DisplayableDrink (
+    val source: String,
     val id: String,
     val name: String,
     val thumbImgSrc: String?

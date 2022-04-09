@@ -7,6 +7,7 @@ import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableIngredient
 
 // Data have multiplesources - each source will implement this interace, which returns data in common displayable form
 interface Browser {
+    val sourceTag: String
     suspend fun getDrinksByName(name: String): List<DisplayableDrinkDetail>
     suspend fun getIngredientsByName(name: String): List<DisplayableIngredient>
     suspend fun getDrinksByCategory(cat: DrinkCategory): List<DisplayableDrink>
