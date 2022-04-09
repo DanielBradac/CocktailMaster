@@ -24,7 +24,7 @@ class MultipleSourceDataCollector(private val browsers: List<Browser>) {
         }
     }
 
-    suspend fun collectDrinksMultipleParams(name: String?, category: DrinkCategory?, ingredients: List<String>?): List<DisplayableDrink> {
+    suspend fun collectDrinksMultipleParams(name: String?, category: DrinkCategory?, ingredients: Array<String>?): List<DisplayableDrink> {
         return coroutineScope {
             val requests = mutableListOf<Deferred<List<DisplayableDrink>>>()
             browsers.forEach { browser ->

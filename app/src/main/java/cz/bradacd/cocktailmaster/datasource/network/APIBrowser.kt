@@ -35,7 +35,7 @@ class CocktailAPIBrowser : Browser {
     override suspend fun getDrinksMultipleParams(
         name: String?,
         category: DrinkCategory?,
-        ingredients: List<String>?
+        ingredients: Array<String>?
     ): List<DisplayableDrink> {
         Log.d("SearchDrinksViewModelLog", "Calling with $name, $category, $ingredients")
         if (name.isNullOrBlank() && ingredients.isNullOrEmpty() && category == null) {
@@ -61,13 +61,13 @@ class CocktailAPIBrowser : Browser {
     private suspend fun filterNameFirst(
         name: String,
         category: DrinkCategory?,
-        ingredients: List<String>?
+        ingredients: Array<out String>?
     ): List<DisplayableDrink> = getDrinksByName(name)
         .filter { it.satisfiesParams(category, ingredients.orEmpty()) }
         .map { DisplayableDrink(sourceTag, it.id, it.name, it.thumbImgSrc) }
 
     // Calls all drinks with each ingredient and than intersect the results
-    private suspend fun filterByIngredients(ingredients: List<String>?): List<DisplayableDrink> =
+    private suspend fun filterByIngredients(ingredients: Array<String>?): List<DisplayableDrink> =
         coroutineScope {
             val requests = mutableListOf<Deferred<List<DisplayableDrink>>>()
             ingredients!!.forEach { ingredient ->
@@ -112,7 +112,7 @@ class CocktailAPIBrowser : Browser {
 // Does the DisplayableDrinkDetail satisfy given category and does it include given ingredients?
 fun DisplayableDrinkDetail.satisfiesParams(
     category: DrinkCategory?,
-    ingredients: List<String>
+    ingredients: Array<out String>
 ): Boolean {
     ingredients.forEach { ingredient ->
         if (!this.ingredients.containsKey(ingredient)) return false

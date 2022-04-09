@@ -15,5 +15,5 @@ interface Browser {
     suspend fun getDrinksMultipleParams(
         name: String? = null,
         category: DrinkCategory? = null,
-        ingredients: List<String>? = null): List<DisplayableDrink>
+        ingredients: Array<String>? = null): List<DisplayableDrink>
 }

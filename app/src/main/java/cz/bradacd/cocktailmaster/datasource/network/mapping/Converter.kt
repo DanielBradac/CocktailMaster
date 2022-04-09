@@ -1,7 +1,5 @@
 package cz.bradacd.cocktailmaster.datasource.network.mapping
 
-import android.util.Log
-import cz.bradacd.cocktailmaster.common.DrinkCategory
 import cz.bradacd.cocktailmaster.common.getCategoryByApiName
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrinkDetail

@@ -29,7 +29,7 @@ class DBBrowser: Browser {
     override suspend fun getDrinksMultipleParams(
         name: String?,
         category: DrinkCategory?,
-        ingredients: List<String>?
+        ingredients: Array<String>?
     ): List<DisplayableDrink> {
         TODO("Not yet implemented")
     }
