@@ -1,10 +1,12 @@
 package cz.bradacd.cocktailmaster.datasource.displayable
 
-data class DisplayableDrink (
+import android.graphics.drawable.Drawable
+
+data class DisplayableDrink(
     val source: String,
     val id: String,
     val name: String,
-    val thumbImgSrc: String?
+    val imageSource: String?
 ) {
     override fun equals(other: Any?): Boolean {
         if (other is DisplayableDrink) {

@@ -9,8 +9,7 @@ import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableIngredient
 // Tohle bude vracet všechno v drinkcommon formě
 class DBBrowser: Browser {
     override val sourceTag = "localDB"
-
-    override suspend fun getDrinksByName(name: String): List<DisplayableDrinkDetail> {
+    override suspend fun getDrinkDetail(id: String, loadImage: Boolean): DisplayableDrinkDetail? {
         TODO("Not yet implemented")
     }
 
@@ -18,19 +17,14 @@ class DBBrowser: Browser {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getDrinksByCategory(cat: DrinkCategory): List<DisplayableDrink> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getDrinkDetail(id: String): DisplayableDrinkDetail? {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun getDrinksMultipleParams(
         name: String?,
         category: DrinkCategory?,
-        ingredients: Array<String>?
+        ingredients: Array<String>?,
+        loadImages: Boolean
     ): List<DisplayableDrink> {
         TODO("Not yet implemented")
     }
+
+
 }

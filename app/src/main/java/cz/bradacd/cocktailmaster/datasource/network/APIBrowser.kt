@@ -1,6 +1,5 @@
 package cz.bradacd.cocktailmaster.datasource.network
 
-import android.util.Log
 import cz.bradacd.cocktailmaster.common.DrinkCategory
 import cz.bradacd.cocktailmaster.common.NotEnoughParametersException
 import cz.bradacd.cocktailmaster.datasource.browser.Browser
@@ -10,25 +9,23 @@ import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableIngredient
 import cz.bradacd.cocktailmaster.datasource.network.mapping.toDisplayable
 import kotlinx.coroutines.*
 
-const val logTag = "CocktailAPIBrowserLog"
-
 // TODO otestovat jak funguje ensureActive
-class CocktailAPIBrowser : Browser {
+class CocktailAPIBrowser() : Browser {
     override val sourceTag = "cocktailAPI"
 
-    override suspend fun getDrinksByName(name: String): List<DisplayableDrinkDetail> =
+    private suspend fun getDrinksByName(name: String): List<DisplayableDrinkDetail> =
         CocktailApi.fetchDrinksByName(name).map { it.toDisplayable(sourceTag) }
 
-    override suspend fun getIngredientsByName(name: String): List<DisplayableIngredient> =
-        CocktailApi.fetchIngredientsByName(name).map { it.toDisplayable(sourceTag) }
-
-    override suspend fun getDrinksByCategory(cat: DrinkCategory): List<DisplayableDrink> =
+    private suspend fun getDrinksByCategory(cat: DrinkCategory): List<DisplayableDrink> =
         CocktailApi.fetchIngredientsByCategory(cat).map { it.toDisplayable(sourceTag) }
 
     private suspend fun getDrinksByIngredient(ingredientName: String): List<DisplayableDrink> =
         CocktailApi.fetchDrinksByIngredient(ingredientName).map { it.toDisplayable(sourceTag) }
 
-    override suspend fun getDrinkDetail(id: String): DisplayableDrinkDetail? =
+    override suspend fun getIngredientsByName(name: String): List<DisplayableIngredient> =
+        CocktailApi.fetchIngredientsByName(name).map { it.toDisplayable(sourceTag) }
+
+    override suspend fun getDrinkDetail(id: String, loadImage: Boolean): DisplayableDrinkDetail? =
         CocktailApi.fetchDrinkDetailById(id)?.toDisplayable(sourceTag)
 
     // TODO otestovat si coroutiny ve stylu výpis vláken, delay, atd..
@@ -36,26 +33,28 @@ class CocktailAPIBrowser : Browser {
     override suspend fun getDrinksMultipleParams(
         name: String?,
         category: DrinkCategory?,
-        ingredients: Array<String>?
+        ingredients: Array<String>?,
+        loadImages: Boolean
     ): List<DisplayableDrink> {
-        Log.d("SearchDrinksViewModelLog", "Calling with $name, $category, $ingredients")
         if (name.isNullOrBlank() && ingredients.isNullOrEmpty() && category == null) {
             throw NotEnoughParametersException("No parameter supplied to multiple params search")
         }
-        // We got name -> the API call already returns all the details we need
-        if (!name.isNullOrBlank()) {
-            return filterNameFirst(name, category, ingredients.orEmpty())
+
+        return if (!name.isNullOrBlank()) {
+            // We got name -> the API call already returns all the details we need
+            filterNameFirst(name, category, ingredients.orEmpty())
+        } else if (category != null && ingredients.isNullOrEmpty()) {
+            // We only have category and no ingredients -> we can directly return drinks only by category
+            getDrinksByCategory(category)
+        } else {
+            // We have ingredients and maybe category -> we filter first by ingredients and than category
+            val filteredByIngredients = filterByIngredients(ingredients)
+            if (category != null) {
+                filterByCategory(filteredByIngredients, category)
+            } else {
+                filteredByIngredients
+            }
         }
-        // We only have category and no ingredients -> we can directly return drinks only by category
-        if (category != null && ingredients.isNullOrEmpty()) {
-            return getDrinksByCategory(category)
-        }
-        // We have ingredients and maybe category -> we filter first by ingredients and than category
-        val filteredByIngredients = filterByIngredients(ingredients)
-        if (category != null) {
-            return filterByCategory(filteredByIngredients, category)
-        }
-        return filteredByIngredients
     }
 
     // API call by name returns detail, that we can filter-out directly without another API call
@@ -65,7 +64,12 @@ class CocktailAPIBrowser : Browser {
         ingredients: Array<out String>?
     ): List<DisplayableDrink> = getDrinksByName(name)
         .filter { it.satisfiesParams(category, ingredients.orEmpty()) }
-        .map { DisplayableDrink(sourceTag, it.id, it.name, it.thumbImgSrc) }
+        .map { DisplayableDrink(
+            source = sourceTag,
+            id = it.id,
+            name = it.name,
+            imageSource = it.imageSource
+        )}
 
     // Calls all drinks with each ingredient and than intersect the results
     private suspend fun filterByIngredients(ingredients: Array<String>?): List<DisplayableDrink> =

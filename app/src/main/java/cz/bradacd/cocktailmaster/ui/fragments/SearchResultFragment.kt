@@ -43,16 +43,14 @@ class SearchResultFragment : Fragment() {
             )
         }
         return binding.root
-
     }
 
+    // TODO loading screen když se to ještě loaduje
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Observe changes in fetched drinks and fill the adapter with it
         viewModel.drinks.observe(viewLifecycleOwner) {
-            Log.d("FetchDebug", "Observer called")
             currentDrinkList.clear()
             if (viewModel.drinks.value != null) {
-                Log.d("FetchDebug", "Got sum drinks: ${viewModel.drinks.value}")
                 currentDrinkList.addAll(viewModel.drinks.value!!)
             }
             binding.searchResultRv.adapter!!

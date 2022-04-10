@@ -38,7 +38,7 @@ class SearchDrinksFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentSearchDrinksBinding.inflate(inflater)
-
+        resources
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@SearchDrinksFragment.viewModel

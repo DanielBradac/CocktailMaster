@@ -31,7 +31,7 @@ fun DetailedDrink.toDisplayable(source: String): DisplayableDrinkDetail {
         category = getCategoryByApiName(strAlcoholic),
         videoSrc = strVideo,
         instructions = strInstructions,
-        thumbImgSrc = strDrinkThumb,
+        imageSource = strDrinkThumb,
         ingredients = ingMap,
         source = source
     )
@@ -40,7 +40,7 @@ fun DetailedDrink.toDisplayable(source: String): DisplayableDrinkDetail {
 fun Drink.toDisplayable(source: String): DisplayableDrink = DisplayableDrink(
         id = idDrink,
         name = strDrink,
-        thumbImgSrc = strDrinkThumb,
+        imageSource = strDrinkThumb,
         source = source
     )
 
