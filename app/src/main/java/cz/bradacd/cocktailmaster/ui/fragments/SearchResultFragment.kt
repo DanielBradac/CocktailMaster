@@ -8,7 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import cz.bradacd.cocktailmaster.databinding.FragmentSearchResultBinding
+import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink
+import cz.bradacd.cocktailmaster.ui.adapters.SearchResultsRVAdapter
 import cz.bradacd.cocktailmaster.viewmodel.SearchDrinksViewModel
 import cz.bradacd.cocktailmaster.viewmodel.SearchResultViewModel
 
@@ -16,8 +19,10 @@ class SearchResultFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchResultBinding
 
-    val args: SearchResultFragmentArgs by navArgs()
+    private val args: SearchResultFragmentArgs by navArgs()
     private val viewModel: SearchResultViewModel by viewModels()
+
+    private var currentDrinkList = mutableListOf<DisplayableDrink>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,15 +35,28 @@ class SearchResultFragment : Fragment() {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
-        }
+            viewModel = this@SearchResultFragment.viewModel
 
+            // Adapter
+            searchResultRv.adapter = SearchResultsRVAdapter(
+                currentDrinkList
+            )
+        }
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        this.viewModel.drinks.observe(viewLifecycleOwner) {
-            Log.d("LookingForDrinks", "Brother I fetched sum drinks: count: ${viewModel.drinks.value?.size}" +
-                    ", drinks: ${viewModel.drinks.value}")
+        // Observe changes in fetched drinks and fill the adapter with it
+        viewModel.drinks.observe(viewLifecycleOwner) {
+            Log.d("FetchDebug", "Observer called")
+            currentDrinkList.clear()
+            if (viewModel.drinks.value != null) {
+                Log.d("FetchDebug", "Got sum drinks: ${viewModel.drinks.value}")
+                currentDrinkList.addAll(viewModel.drinks.value!!)
+            }
+            binding.searchResultRv.adapter!!
+                .notifyItemRangeInserted(0, currentDrinkList.size)
         }
     }
 }

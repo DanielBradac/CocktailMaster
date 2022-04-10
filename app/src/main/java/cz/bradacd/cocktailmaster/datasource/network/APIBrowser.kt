@@ -32,6 +32,7 @@ class CocktailAPIBrowser : Browser {
         CocktailApi.fetchDrinkDetailById(id)?.toDisplayable(sourceTag)
 
     // TODO otestovat si coroutiny ve stylu výpis vláken, delay, atd..
+    // TODO Ingredience "Peach" padá na EOF
     override suspend fun getDrinksMultipleParams(
         name: String?,
         category: DrinkCategory?,

@@ -93,7 +93,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/added_ingredients_rw"
+            android:id="@+id/added_ingredients_rv"
             android:layout_width="300dp"
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="@+id/left_guideline"

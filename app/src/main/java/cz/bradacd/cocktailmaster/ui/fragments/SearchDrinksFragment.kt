@@ -4,13 +4,11 @@ import android.R.layout.simple_list_item_1
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,7 +17,7 @@ import com.google.android.material.textview.MaterialTextView
 import cz.bradacd.cocktailmaster.R
 import cz.bradacd.cocktailmaster.common.DrinkCategory
 import cz.bradacd.cocktailmaster.databinding.FragmentSearchDrinksBinding
-import cz.bradacd.cocktailmaster.ui.adapters.AddedIngredientAdapter
+import cz.bradacd.cocktailmaster.ui.adapters.AddedIngredientRVAdapter
 import cz.bradacd.cocktailmaster.viewmodel.SearchDrinksViewModel
 
 // TODO setupnout constrint layout v constraint layoutu - ten vnější bude řešit ty okraje, případně v něm bude to search tlačítko
@@ -31,7 +29,7 @@ class SearchDrinksFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchDrinksBinding
     private val viewModel: SearchDrinksViewModel by viewModels()
-    private var addedIngredientsList: MutableList<String> = mutableListOf()
+    private var addedIngredientsList = mutableListOf<String>()
     private lateinit var suggestionAdapter: ArrayAdapter<String>
 
     override fun onCreateView(
@@ -49,8 +47,8 @@ class SearchDrinksFragment : Fragment() {
             suggestionAdapter = createAutocompleteAdapter()
             addIngredientsAutocomplete.setAdapter(suggestionAdapter)
 
-            addedIngredientsRw.adapter = AddedIngredientAdapter(addedIngredientsList)
-            addedIngredientsRw.layoutManager =
+            addedIngredientsRv.adapter = AddedIngredientRVAdapter(addedIngredientsList)
+            addedIngredientsRv.layoutManager =
                 GridLayoutManager(this@SearchDrinksFragment.requireContext(), 2)
 
             drinkTypeSpinner.adapter =
@@ -76,7 +74,7 @@ class SearchDrinksFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // TODO zobrazit chybu a zablokovat online search, pokud je viewmodel.apiAvailable false
 
-        // Observers setup
+        // Observe changes in ingredients suggestions data and change suggestion accordingly
         this.viewModel.ingredientSuggestion.observe(viewLifecycleOwner) { newSuggestions ->
             if (newSuggestions.isNullOrEmpty()) {
                 binding.addIngredientsAutocomplete.error = "No ingredients found"
@@ -86,13 +84,12 @@ class SearchDrinksFragment : Fragment() {
                 clear()
                 addAll(newSuggestions)
                 // We show whole new list, because it is already filtered from the data fetch
-                suggestionAdapter.filter.filter(null)
+                filter.filter(null)
             }
         }
     }
 
     private fun navigateToSearchRes() {
-
         with(binding) {
             val action =
                 SearchDrinksFragmentDirections.actionSearchDrinksFragmentToSearchResultFragment(
@@ -116,7 +113,7 @@ class SearchDrinksFragment : Fragment() {
     private fun addIngredient(ingredientText: String) {
         with(binding) {
             addedIngredientsList.add(ingredientText)
-            addedIngredientsRw.adapter!!.notifyItemInserted(addedIngredientsList.size - 1)
+            addedIngredientsRv.adapter!!.notifyItemInserted(addedIngredientsList.size - 1)
             addIngredientsAutocomplete.setText("")
         }
     }
@@ -137,7 +134,6 @@ class SearchDrinksFragment : Fragment() {
                 binding.addIngredientsAutocomplete.error = null
             }
         }
-
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     }

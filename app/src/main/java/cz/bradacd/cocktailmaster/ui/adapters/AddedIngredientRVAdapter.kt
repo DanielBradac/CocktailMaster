@@ -1,5 +1,6 @@
 package cz.bradacd.cocktailmaster.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,11 +9,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import cz.bradacd.cocktailmaster.R
 
-class AddedIngredientAdapter (
+class AddedIngredientRVAdapter (
     private val addedIngredients: MutableList<String>
-): RecyclerView.Adapter<AddedIngredientAdapter.ItemViewHolder>() {
+): RecyclerView.Adapter<AddedIngredientRVAdapter.ItemViewHolder>() {
 
-    val logTag = "AddedIngredientAdapterLog"
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val adapterLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.added_ingredients_list_item, parent, false)
@@ -25,7 +25,7 @@ class AddedIngredientAdapter (
             // Remove item
             removeIngredientBtn.setOnClickListener {
                 addedIngredients.removeAt(adapterPosition)
-                this@AddedIngredientAdapter.notifyItemRemoved(adapterPosition)
+                this@AddedIngredientRVAdapter.notifyItemRemoved(adapterPosition)
             }
         }
     }
