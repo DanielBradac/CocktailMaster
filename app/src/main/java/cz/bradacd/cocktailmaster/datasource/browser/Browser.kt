@@ -1,14 +1,12 @@
 package cz.bradacd.cocktailmaster.datasource.browser
 
-import android.graphics.drawable.Drawable
 import android.widget.ImageView
-import coil.request.Disposable
 import cz.bradacd.cocktailmaster.common.DrinkCategory
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrinkDetail
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableIngredient
 
-// Data have multiplesources - each source will implement this interace, which returns data in common displayable form
+// Data have multiple sources - each source will implement this interface, which returns data in common displayable form
 interface Browser {
     val sourceTag: String
     suspend fun getDrinkDetail(id: String, loadImage: Boolean = true): DisplayableDrinkDetail?

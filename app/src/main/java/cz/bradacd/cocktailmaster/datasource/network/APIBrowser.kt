@@ -3,7 +3,6 @@ package cz.bradacd.cocktailmaster.datasource.network
 import android.widget.ImageView
 import androidx.core.net.toUri
 import coil.load
-import coil.request.Disposable
 import cz.bradacd.cocktailmaster.R
 import cz.bradacd.cocktailmaster.common.DrinkCategory
 import cz.bradacd.cocktailmaster.common.NotEnoughParametersException
@@ -66,7 +65,7 @@ class CocktailAPIBrowser() : Browser {
         val imgUri = imageResourceId.toUri().buildUpon().scheme("https").build()
         imgView.load(imgUri) {
             error(R.drawable.ic_cocktail_default_icon)
-            // TODO nějaký loading image
+            placeholder(R.drawable.ic_loading_img)
         }
     }
 
