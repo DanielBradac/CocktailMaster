@@ -1,5 +1,6 @@
 package cz.bradacd.cocktailmaster.datasource.database
 
+import android.widget.ImageView
 import cz.bradacd.cocktailmaster.common.DrinkCategory
 import cz.bradacd.cocktailmaster.datasource.browser.Browser
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink
@@ -26,5 +27,7 @@ class DBBrowser: Browser {
         TODO("Not yet implemented")
     }
 
-
+    override fun loadImage(imgView: ImageView, imageResourceId: String) {
+        TODO("Not yet implemented")
+    }
 }

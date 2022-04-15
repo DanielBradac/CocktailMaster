@@ -1,10 +1,9 @@
 package cz.bradacd.cocktailmaster.datasource.displayable
 
-import android.graphics.drawable.Drawable
 import cz.bradacd.cocktailmaster.common.DrinkCategory
 
 data class DisplayableDrinkDetail(
-    val source: String,
+    val dataSourceTag: String,
     val id: String,
     val name: String,
     val category: DrinkCategory?,

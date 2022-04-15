@@ -1,5 +1,10 @@
 package cz.bradacd.cocktailmaster.datasource.network
 
+import android.widget.ImageView
+import androidx.core.net.toUri
+import coil.load
+import coil.request.Disposable
+import cz.bradacd.cocktailmaster.R
 import cz.bradacd.cocktailmaster.common.DrinkCategory
 import cz.bradacd.cocktailmaster.common.NotEnoughParametersException
 import cz.bradacd.cocktailmaster.datasource.browser.Browser
@@ -57,6 +62,14 @@ class CocktailAPIBrowser() : Browser {
         }
     }
 
+    override fun loadImage(imgView: ImageView, imageResourceId: String) {
+        val imgUri = imageResourceId.toUri().buildUpon().scheme("https").build()
+        imgView.load(imgUri) {
+            error(R.drawable.ic_cocktail_default_icon)
+            // TODO nějaký loading image
+        }
+    }
+
     // API call by name returns detail, that we can filter-out directly without another API call
     private suspend fun filterNameFirst(
         name: String,
@@ -65,7 +78,7 @@ class CocktailAPIBrowser() : Browser {
     ): List<DisplayableDrink> = getDrinksByName(name)
         .filter { it.satisfiesParams(category, ingredients.orEmpty()) }
         .map { DisplayableDrink(
-            source = sourceTag,
+            dataSourceTag = sourceTag,
             id = it.id,
             name = it.name,
             imageSource = it.imageSource

@@ -1,9 +1,7 @@
 package cz.bradacd.cocktailmaster.datasource.displayable
 
-import android.graphics.drawable.Drawable
-
 data class DisplayableDrink(
-    val source: String,
+    val dataSourceTag: String,
     val id: String,
     val name: String,
     val imageSource: String?

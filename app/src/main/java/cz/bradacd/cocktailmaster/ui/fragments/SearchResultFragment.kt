@@ -39,7 +39,8 @@ class SearchResultFragment : Fragment() {
 
             // Adapter
             searchResultRv.adapter = SearchResultsRVAdapter(
-                currentDrinkList
+                currentDrinkList,
+                args
             )
         }
         return binding.root

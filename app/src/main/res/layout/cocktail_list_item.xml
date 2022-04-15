@@ -7,6 +7,10 @@
         <variable
             name="drink"
             type="cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink" />
+
+        <variable
+            name="dataCollector"
+            type="cz.bradacd.cocktailmaster.datasource.browser.MultipleSourceDataCollector" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -26,7 +30,10 @@
                 android:importantForAccessibility="no"
                 android:scaleType="fitStart"
                 android:src="@drawable/ic_cocktail_default_icon"
+                app:dataCollector="@{dataCollector}"
+                app:drink="@{drink}"
                 app:layout_constraintBottom_toBottomOf="parent"
+
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

@@ -1,6 +1,8 @@
 package cz.bradacd.cocktailmaster.datasource.browser
 
 import android.graphics.drawable.Drawable
+import android.widget.ImageView
+import coil.request.Disposable
 import cz.bradacd.cocktailmaster.common.DrinkCategory
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrinkDetail
@@ -16,4 +18,6 @@ interface Browser {
         category: DrinkCategory? = null,
         ingredients: Array<String>? = null,
         loadImages: Boolean = true): List<DisplayableDrink>
+
+    fun loadImage(imgView: ImageView, imageResourceId: String)
 }

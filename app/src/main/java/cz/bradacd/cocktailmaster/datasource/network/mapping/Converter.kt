@@ -33,20 +33,20 @@ fun DetailedDrink.toDisplayable(source: String): DisplayableDrinkDetail {
         instructions = strInstructions,
         imageSource = strDrinkThumb,
         ingredients = ingMap,
-        source = source
+        dataSourceTag = source
     )
 }
 
-fun Drink.toDisplayable(source: String): DisplayableDrink = DisplayableDrink(
+fun Drink.toDisplayable(sourceTag: String): DisplayableDrink = DisplayableDrink(
         id = idDrink,
         name = strDrink,
         imageSource = strDrinkThumb,
-        source = source
+        dataSourceTag = sourceTag
     )
 
-fun Ingredient.toDisplayable(source: String): DisplayableIngredient = DisplayableIngredient(
+fun Ingredient.toDisplayable(sourceTag: String): DisplayableIngredient = DisplayableIngredient(
     id = idIngredient,
     name = strIngredient,
-    source = source
+    dataSourceTag = sourceTag
 )
 

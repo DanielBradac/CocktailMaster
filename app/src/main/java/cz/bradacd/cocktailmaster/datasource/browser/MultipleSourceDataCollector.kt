@@ -1,5 +1,7 @@
 package cz.bradacd.cocktailmaster.datasource.browser
 
+import android.widget.ImageView
+import cz.bradacd.cocktailmaster.R
 import cz.bradacd.cocktailmaster.common.DrinkCategory
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableIngredient
@@ -34,6 +36,19 @@ class MultipleSourceDataCollector(private val browsers: List<Browser>) {
                 })
             }
             return@coroutineScope requests.awaitAll().flatten()
+        }
+    }
+
+    fun loadImage(imgView: ImageView, dataSourceTag: String?, imageSource: String?) {
+        if (dataSourceTag.isNullOrBlank() || imageSource.isNullOrBlank()) return
+
+        browsers.find { it.sourceTag == dataSourceTag }.let { browser ->
+            if (browser != null) {
+                browser.loadImage(imgView, imageSource)
+                return
+            }
+            // No suitable browsers found - set default icon
+            imgView.setImageResource(R.drawable.ic_cocktail_default_icon)
         }
     }
 }
