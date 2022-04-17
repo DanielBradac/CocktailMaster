@@ -4,7 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="enter_cocktail_name">Cocktail name</string>
     <string name="search_button_text">Search</string>
-    <string name="search_result_count">%d drinks found</string>
+    <string name="search_result_count">Drinks found: %daper</string>
     <string name="search_result_warning">(Online search is limited to first 100 results)</string>
     <string name="search_result_loading">Loading…</string>
     <string name="search_result_error">Error occurred during retrieving data:\n %s</string>
