@@ -52,7 +52,7 @@ class SearchResultFragment : Fragment() {
         // Observe changes in data fetch status and fill the adapter if it was successful
         viewModel.status.observe(viewLifecycleOwner) { status ->
             when (status) {
-                is LoadingStatus.Loading -> loadingDataFetch(status)
+                is LoadingStatus.Loading -> loadingDataFetch()
                 is LoadingStatus.Success -> successFullDataFetch()
                 is LoadingStatus.Error -> errorDataFetch(status)
             }
@@ -61,13 +61,12 @@ class SearchResultFragment : Fragment() {
 
     private fun successFullDataFetch() {
         drinkList.clear()
-        if (viewModel.drinks.value != null) {
-            drinkList.addAll(viewModel.drinks.value!!)
-        }
+        drinkList.addAll(viewModel.drinks)
+
         binding.apply {
-            // Fill recycler view with drinks
+            // Notify recycler view about data change
             searchResultRv.adapter!!.notifyItemRangeInserted(0, drinkList.size)
-            // Fill the status bar.
+            // Create status bar text
             var statusTextFormat =
                 String.format(getString(R.string.search_result_count), drinkList.size)
             if (drinkList.size >= onlineSearchLimit) {
@@ -82,7 +81,7 @@ class SearchResultFragment : Fragment() {
             String.format(getString(R.string.search_result_error), status.errorMessage)
     }
 
-    private fun loadingDataFetch(status: LoadingStatus.Loading) {
+    private fun loadingDataFetch() {
         binding.statusText.text = getString(R.string.search_result_loading)
     }
 }

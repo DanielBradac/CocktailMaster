@@ -17,9 +17,8 @@ import kotlinx.coroutines.launch
 
 class SearchResultViewModel: ViewModel() {
     private lateinit var dataCollector: MultipleSourceDataCollector
-
-    private val _drinks = MutableLiveData<List<DisplayableDrink>>()
-    val drinks: LiveData<List<DisplayableDrink>> = _drinks
+    var drinks = listOf<DisplayableDrink>()
+        private set
 
     private val _status = MutableLiveData<LoadingStatus>(LoadingStatus.Loading)
     val status: LiveData<LoadingStatus> = _status
@@ -42,12 +41,14 @@ class SearchResultViewModel: ViewModel() {
     }
 
     private fun getSearchResult(args: SearchResultFragmentArgs) {
+        // TODO, když je výsledek prázný, tak vypadne exception
         viewModelScope.launch(coroutineExceptionHandler) {
-            _drinks.value = dataCollector.collectDrinksMultipleParams(
+            drinks = dataCollector.collectDrinksMultipleParams(
                 name = args.drinkName,
                 category = getCategoryByApiName(args.drinkCategory),
                 ingredients = args.ingredients
             )
+            Log.d("logger1", drinks.size.toString())
             _status.value = LoadingStatus.Success
         }
     }
