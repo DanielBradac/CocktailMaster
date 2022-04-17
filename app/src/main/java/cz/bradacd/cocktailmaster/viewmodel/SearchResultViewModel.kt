@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cz.bradacd.cocktailmaster.common.LoadingStatus
 import cz.bradacd.cocktailmaster.common.getCategoryByApiName
 import cz.bradacd.cocktailmaster.datasource.browser.Browser
 import cz.bradacd.cocktailmaster.datasource.browser.MultipleSourceDataCollector
@@ -20,6 +21,9 @@ class SearchResultViewModel: ViewModel() {
     private val _drinks = MutableLiveData<List<DisplayableDrink>>()
     val drinks: LiveData<List<DisplayableDrink>> = _drinks
 
+    private val _status = MutableLiveData<LoadingStatus>(LoadingStatus.Loading)
+    val status: LiveData<LoadingStatus> = _status
+
     fun initResultSearch(args: SearchResultFragmentArgs) {
         val browsers = mutableListOf<Browser>()
 
@@ -34,6 +38,7 @@ class SearchResultViewModel: ViewModel() {
     // TODO vyrobit si nějaký error handeling na tyhle případy
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
         Log.e("RetrofitBroken", throwable.stackTraceToString())
+        _status.value = throwable.localizedMessage?.let { LoadingStatus.Error(it) }
     }
 
     private fun getSearchResult(args: SearchResultFragmentArgs) {
@@ -43,6 +48,7 @@ class SearchResultViewModel: ViewModel() {
                 category = getCategoryByApiName(args.drinkCategory),
                 ingredients = args.ingredients
             )
+            _status.value = LoadingStatus.Success
         }
     }
 }

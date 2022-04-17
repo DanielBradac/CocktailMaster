@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import cz.bradacd.cocktailmaster.R
+import cz.bradacd.cocktailmaster.common.LoadingStatus
 import cz.bradacd.cocktailmaster.databinding.FragmentSearchResultBinding
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink
 import cz.bradacd.cocktailmaster.ui.adapters.SearchResultsRVAdapter
@@ -22,8 +24,8 @@ class SearchResultFragment : Fragment() {
     private val args: SearchResultFragmentArgs by navArgs()
     private val viewModel: SearchResultViewModel by viewModels()
 
-    private var currentDrinkList = mutableListOf<DisplayableDrink>()
-
+    private var drinkList = mutableListOf<DisplayableDrink>()
+    private val onlineSearchLimit = 100
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,23 +41,48 @@ class SearchResultFragment : Fragment() {
 
             // Adapter
             searchResultRv.adapter = SearchResultsRVAdapter(
-                currentDrinkList,
+                drinkList,
                 args
             )
         }
         return binding.root
     }
 
-    // TODO loading screen když se to ještě loaduje
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Observe changes in fetched drinks and fill the adapter with it
-        viewModel.drinks.observe(viewLifecycleOwner) {
-            currentDrinkList.clear()
-            if (viewModel.drinks.value != null) {
-                currentDrinkList.addAll(viewModel.drinks.value!!)
+        // Observe changes in data fetch status and fill the adapter if it was successful
+        viewModel.status.observe(viewLifecycleOwner) { status ->
+            when (status) {
+                is LoadingStatus.Loading -> loadingDataFetch(status)
+                is LoadingStatus.Success -> successFullDataFetch()
+                is LoadingStatus.Error -> errorDataFetch(status)
             }
-            binding.searchResultRv.adapter!!
-                .notifyItemRangeInserted(0, currentDrinkList.size)
         }
+    }
+
+    private fun successFullDataFetch() {
+        drinkList.clear()
+        if (viewModel.drinks.value != null) {
+            drinkList.addAll(viewModel.drinks.value!!)
+        }
+        binding.apply {
+            // Fill recycler view with drinks
+            searchResultRv.adapter!!.notifyItemRangeInserted(0, drinkList.size)
+            // Fill the status bar.
+            var statusTextFormat =
+                String.format(getString(R.string.search_result_count), drinkList.size)
+            if (drinkList.size >= onlineSearchLimit) {
+                statusTextFormat += "\n" + getString(R.string.search_result_warning)
+            }
+            statusText.text = statusTextFormat
+        }
+    }
+
+    private fun errorDataFetch(status: LoadingStatus.Error) {
+        binding.statusText.text =
+            String.format(getString(R.string.search_result_error), status.errorMessage)
+    }
+
+    private fun loadingDataFetch(status: LoadingStatus.Loading) {
+        binding.statusText.text = getString(R.string.search_result_loading)
     }
 }
