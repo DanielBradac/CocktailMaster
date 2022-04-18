@@ -3,7 +3,7 @@ package cz.bradacd.cocktailmaster.datasource.network.mapping
 import com.squareup.moshi.Json
 
 data class Drinks(
-    @Json(name = "drinks") val drinks: List<Drink>
+    @Json(name = "drinks") val drinks: List<Drink>?
 )
 
 data class Drink(
@@ -13,7 +13,7 @@ data class Drink(
 )
 
 data class DrinksDetailed(
-    @Json(name = "drinks") val drinks: List<DetailedDrink>
+    @Json(name = "drinks") val drinks: List<DetailedDrink>?
 )
 
 data class DetailedDrink(

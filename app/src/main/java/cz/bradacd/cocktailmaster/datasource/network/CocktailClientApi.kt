@@ -1,11 +1,9 @@
 package cz.bradacd.cocktailmaster.datasource.network
 
-import android.util.Log
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import cz.bradacd.cocktailmaster.common.DrinkCategory
 import cz.bradacd.cocktailmaster.datasource.network.mapping.*
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -43,31 +41,20 @@ object CocktailApi {
     }
 
     suspend fun fetchDrinksByName(name: String): List<DetailedDrink> {
-        return retrofitService.getDrinksByName(name).drinks
+        return retrofitService.getDrinksByName(name).drinks ?: return emptyList()
     }
 
     suspend fun fetchIngredientsByName(name: String): List<Ingredient> {
-        val ingredient = retrofitService.getIngredientByName(name).ingredient
-        if (ingredient.isNullOrEmpty()) {
-            return emptyList()
-        }
-        return ingredient
+        return retrofitService.getIngredientByName(name).ingredient ?: return emptyList()
     }
 
     suspend fun fetchIngredientsByCategory(category: DrinkCategory): List<Drink> {
-        val drinks = retrofitService.getDrinksByCategory(category.apiName).drinks
-        if (drinks.isNullOrEmpty()) {
-            return emptyList()
-        }
-        return drinks
+        return retrofitService.getDrinksByCategory(category.apiName).drinks?: return emptyList()
     }
 
     suspend fun fetchDrinksByIngredient(ingredientName: String): List<Drink> {
-        val drinks = retrofitService.getDrinksByIngredientName(ingredientName).drinks
-        if (drinks.isNullOrEmpty()) {
-            return emptyList()
-        }
-        return drinks
+        return retrofitService.getDrinksByIngredientName(ingredientName).drinks
+            ?: return emptyList()
     }
 
     suspend fun fetchDrinkDetailById(drinkId: String): DetailedDrink? {

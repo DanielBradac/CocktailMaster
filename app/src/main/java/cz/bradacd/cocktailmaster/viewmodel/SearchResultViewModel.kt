@@ -41,7 +41,6 @@ class SearchResultViewModel: ViewModel() {
     }
 
     private fun getSearchResult(args: SearchResultFragmentArgs) {
-        // TODO, když je výsledek prázný, tak vypadne exception
         viewModelScope.launch(coroutineExceptionHandler) {
             drinks = dataCollector.collectDrinksMultipleParams(
                 name = args.drinkName,
