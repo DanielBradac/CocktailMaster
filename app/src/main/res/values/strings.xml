@@ -8,4 +8,8 @@
     <string name="search_result_warning">(Online search is limited to first 100 results)</string>
     <string name="search_result_loading">Loading…</string>
     <string name="search_result_error">Error occurred during retrieving data:\n %s</string>
+
+    <string name="error_unknown">Unknown error occurred. Try again later</string>
+    <string name="error_internet_connection">Connection to online API failed. Check your Internet connection.</string>
+    <string name="error_unable_detail">Unable to find drink detail.</string>
 </resources>

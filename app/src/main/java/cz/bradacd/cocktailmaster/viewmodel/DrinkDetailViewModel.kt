@@ -1,17 +1,17 @@
 package cz.bradacd.cocktailmaster.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cz.bradacd.cocktailmaster.R
 import cz.bradacd.cocktailmaster.common.LoadingStatus
+import cz.bradacd.cocktailmaster.common.getErrorRes
 import cz.bradacd.cocktailmaster.datasource.browser.Browser
 import cz.bradacd.cocktailmaster.datasource.browser.createBrowserFromTag
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrinkDetail
 import cz.bradacd.cocktailmaster.ui.fragments.DrinkDetailFragmentArgs
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -29,7 +29,7 @@ class DrinkDetailViewModel: ViewModel() {
     // Handle possible error inside retrofit - catch block wouldn't get it
     // TODO vyrobit si nějaký error handeling na tyhle případy
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
-        _status.value = throwable.localizedMessage?.let { LoadingStatus.Error(it) }
+        _status.value = throwable.localizedMessage?.let { LoadingStatus.Error(getErrorRes(throwable)) }
     }
 
     fun initDrinkDetailSearch(args: DrinkDetailFragmentArgs) {
@@ -38,13 +38,13 @@ class DrinkDetailViewModel: ViewModel() {
             viewModelScope.launch(coroutineExceptionHandler) {
                 _drinkDetail.value = browser.getDrinkDetail(args.drinkId)
                 if (drinkDetail.value == null) {
-                    _status.value = LoadingStatus.Error("Unable to find drink detail")
+                    _status.value = LoadingStatus.Error(R.string.error_unable_detail)
                 } else {
                     _status.value = LoadingStatus.Success
                 }
             }
         } catch (e: Exception) {
-            _status.value = e.localizedMessage?.let { LoadingStatus.Error(it) }
+            _status.value = e.localizedMessage?.let { LoadingStatus.Error(getErrorRes(e)) }
         }
     }
 }

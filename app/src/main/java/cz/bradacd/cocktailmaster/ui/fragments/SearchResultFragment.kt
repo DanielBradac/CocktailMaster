@@ -77,8 +77,7 @@ class SearchResultFragment : Fragment() {
     }
 
     private fun errorDataFetch(status: LoadingStatus.Error) {
-        binding.statusText.text =
-            String.format(getString(R.string.search_result_error), status.errorMessage)
+        binding.statusText.text = getString(status.errorMessageResource)
     }
 
     private fun loadingDataFetch() {

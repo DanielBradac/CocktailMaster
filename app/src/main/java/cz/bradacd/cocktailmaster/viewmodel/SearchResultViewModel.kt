@@ -1,12 +1,12 @@
 package cz.bradacd.cocktailmaster.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.bradacd.cocktailmaster.common.LoadingStatus
 import cz.bradacd.cocktailmaster.common.getCategoryByApiName
+import cz.bradacd.cocktailmaster.common.getErrorRes
 import cz.bradacd.cocktailmaster.datasource.browser.Browser
 import cz.bradacd.cocktailmaster.datasource.browser.MultipleSourceDataCollector
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink
@@ -40,7 +40,7 @@ class SearchResultViewModel: ViewModel() {
     // Handle possible error inside retrofit - catch block wouldn't get it
     // TODO vyrobit si nějaký error handeling na tyhle případy
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
-        _status.value = throwable.localizedMessage?.let { LoadingStatus.Error(it) }
+            _status.value = throwable.localizedMessage?.let { LoadingStatus.Error(getErrorRes(throwable)) }
     }
 
     private fun getSearchResult(args: SearchResultFragmentArgs) {
