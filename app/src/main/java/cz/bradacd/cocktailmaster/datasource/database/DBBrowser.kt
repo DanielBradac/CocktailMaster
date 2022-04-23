@@ -10,7 +10,7 @@ import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableIngredient
 // Tohle bude vracet všechno v drinkcommon formě
 class DBBrowser: Browser {
     override val sourceTag = "localDB"
-    override suspend fun getDrinkDetail(id: String, loadImage: Boolean): DisplayableDrinkDetail? {
+    override suspend fun getDrinkDetail(id: String): DisplayableDrinkDetail? {
         TODO("Not yet implemented")
     }
 

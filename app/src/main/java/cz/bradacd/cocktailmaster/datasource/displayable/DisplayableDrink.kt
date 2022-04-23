@@ -1,5 +1,7 @@
 package cz.bradacd.cocktailmaster.datasource.displayable
 
+import android.util.Log
+
 data class DisplayableDrink(
     val dataSourceTag: String,
     val id: String,

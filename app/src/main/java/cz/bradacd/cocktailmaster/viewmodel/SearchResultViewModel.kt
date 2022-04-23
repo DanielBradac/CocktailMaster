@@ -23,20 +23,23 @@ class SearchResultViewModel: ViewModel() {
     private val _status = MutableLiveData<LoadingStatus>(LoadingStatus.Loading)
     val status: LiveData<LoadingStatus> = _status
 
-    fun initResultSearch(args: SearchResultFragmentArgs) {
+    fun initDrinkListSearch(args: SearchResultFragmentArgs) {
         val browsers = mutableListOf<Browser>()
 
         // TODO DBBrowser not yet implemented
         //if (args.searchLocal) browsers.add(DBBrowser())
         if (args.searchOnline) browsers.add(CocktailAPIBrowser())
         dataCollector = MultipleSourceDataCollector(browsers)
-        getSearchResult(args)
+
+        // This means the search was already done before (user navigated up), we don't need it
+        if (status.value == LoadingStatus.Loading) {
+            getSearchResult(args)
+        }
     }
 
     // Handle possible error inside retrofit - catch block wouldn't get it
     // TODO vyrobit si nějaký error handeling na tyhle případy
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
-        Log.e("RetrofitBroken", throwable.stackTraceToString())
         _status.value = throwable.localizedMessage?.let { LoadingStatus.Error(it) }
     }
 
@@ -47,7 +50,6 @@ class SearchResultViewModel: ViewModel() {
                 category = getCategoryByApiName(args.drinkCategory),
                 ingredients = args.ingredients
             )
-            Log.d("logger1", drinks.size.toString())
             _status.value = LoadingStatus.Success
         }
     }

@@ -8,13 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
 import cz.bradacd.cocktailmaster.R
 import cz.bradacd.cocktailmaster.common.LoadingStatus
 import cz.bradacd.cocktailmaster.databinding.FragmentSearchResultBinding
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink
 import cz.bradacd.cocktailmaster.ui.adapters.SearchResultsRVAdapter
-import cz.bradacd.cocktailmaster.viewmodel.SearchDrinksViewModel
 import cz.bradacd.cocktailmaster.viewmodel.SearchResultViewModel
 
 class SearchResultFragment : Fragment() {
@@ -26,20 +24,21 @@ class SearchResultFragment : Fragment() {
 
     private var drinkList = mutableListOf<DisplayableDrink>()
     private val onlineSearchLimit = 100
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Fetch data
-        viewModel.initResultSearch(args)
-        // Inflate the layout for this fragment
-        binding = FragmentSearchResultBinding.inflate(inflater)
+        // Start search
+        viewModel.initDrinkListSearch(args)
 
+        binding = FragmentSearchResultBinding.inflate(inflater)
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@SearchResultFragment.viewModel
 
             // Adapter
+            Log.d("DebuggingCrash", "I am creating adapter with: ${drinkList}")
             searchResultRv.adapter = SearchResultsRVAdapter(
                 drinkList,
                 args
@@ -53,27 +52,28 @@ class SearchResultFragment : Fragment() {
         viewModel.status.observe(viewLifecycleOwner) { status ->
             when (status) {
                 is LoadingStatus.Loading -> loadingDataFetch()
-                is LoadingStatus.Success -> successFullDataFetch()
+                is LoadingStatus.Success -> successfulDataFetch()
                 is LoadingStatus.Error -> errorDataFetch(status)
             }
         }
     }
 
-    private fun successFullDataFetch() {
-        drinkList.clear()
-        drinkList.addAll(viewModel.drinks)
-
-        binding.apply {
-            // Notify recycler view about data change
-            searchResultRv.adapter!!.notifyItemRangeInserted(0, drinkList.size)
-            // Create status bar text
-            var statusTextFormat =
-                String.format(getString(R.string.search_result_count), drinkList.size)
-            if (drinkList.size >= onlineSearchLimit) {
-                statusTextFormat += "\n" + getString(R.string.search_result_warning)
-            }
-            statusText.text = statusTextFormat
+    private fun successfulDataFetch() {
+        // If the drink list is the same, we don't need to update it
+        if (drinkList != viewModel.drinks) {
+            // Fill adapter with new values
+            drinkList.clear()
+            drinkList.addAll(viewModel.drinks)
+            binding.searchResultRv.adapter!!.notifyItemRangeInserted(0, drinkList.size)
         }
+
+        // Create/update status bar text
+        var statusTextFormat =
+            String.format(getString(R.string.search_result_count), drinkList.size)
+        if (drinkList.size >= onlineSearchLimit) {
+            statusTextFormat += "\n" + getString(R.string.search_result_warning)
+        }
+        binding.statusText.text = statusTextFormat
     }
 
     private fun errorDataFetch(status: LoadingStatus.Error) {

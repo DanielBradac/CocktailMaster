@@ -29,7 +29,7 @@ class CocktailAPIBrowser() : Browser {
     override suspend fun getIngredientsByName(name: String): List<DisplayableIngredient> =
         CocktailApi.fetchIngredientsByName(name).map { it.toDisplayable(sourceTag) }
 
-    override suspend fun getDrinkDetail(id: String, loadImage: Boolean): DisplayableDrinkDetail? =
+    override suspend fun getDrinkDetail(id: String): DisplayableDrinkDetail? =
         CocktailApi.fetchDrinkDetailById(id)?.toDisplayable(sourceTag)
 
     // TODO otestovat si coroutiny ve stylu výpis vláken, delay, atd..
@@ -120,7 +120,7 @@ class CocktailAPIBrowser() : Browser {
 
     companion object {
         fun testApi(): Boolean {
-            // TODO Otestovat api - nějak
+            // TODO Otestovat api - tady by šlo volat www.thecocktaildb.com/api/json/v1/1/list.php?a=list
             return true
         }
     }
