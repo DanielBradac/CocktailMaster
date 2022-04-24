@@ -19,11 +19,6 @@ import kotlin.random.Random
 
 class SearchDrinksViewModel: ViewModel() {
 
-    private val logTag = "SearchDrinksViewModelLog"
-
-    private var _drinks = MutableLiveData<List<DisplayableDrink>>()
-    val drinks = _drinks
-
     private var _ingredientSuggestion = MutableLiveData<List<String>>()
     val ingredientSuggestion = _ingredientSuggestion
 
@@ -36,7 +31,7 @@ class SearchDrinksViewModel: ViewModel() {
     // Handle possible error inside retrofit - catch block wouldn't get it
     // TODO vyrobit si nějaký error handeling na tyhle případy
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
-        Log.e(logTag, throwable.stackTraceToString())
+        Log.e("CoroutineError", throwable.stackTraceToString())
     }
 
     init {
@@ -45,6 +40,8 @@ class SearchDrinksViewModel: ViewModel() {
             if (apiAvailable) {
                 dataCollector.addBrowser(CocktailAPIBrowser())
             }
+            // TODO něco udělat když to nebude available
+            //      - nějakej error bar a zablokovat online search
         }
     }
 
@@ -59,7 +56,7 @@ class SearchDrinksViewModel: ViewModel() {
                 if (e is CancellationException) {
                     throw e
                 }
-                Log.e(logTag, e.stackTraceToString())
+                Log.e("CoroutineError", e.stackTraceToString())
             } finally {
                 _progressBarVisibility.value = View.GONE
             }

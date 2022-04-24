@@ -11,7 +11,6 @@ import kotlinx.coroutines.*
 // TODO tady se bude opakovat kód, chtělo by to nějak zobecnit
 // TODO otestovat jak funguje ensureActive
 class MultipleSourceDataCollector() {
-    private val logTag = "DataCollector"
     private val browsers = mutableListOf<Browser>()
 
     fun addBrowser(browser: Browser) = browsers.add(browser)
