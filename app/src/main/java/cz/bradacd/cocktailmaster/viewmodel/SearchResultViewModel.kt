@@ -16,7 +16,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class SearchResultViewModel: ViewModel() {
-    private lateinit var dataCollector: MultipleSourceDataCollector
+    private var dataCollector = MultipleSourceDataCollector()
     var drinks = listOf<DisplayableDrink>()
         private set
 
@@ -24,12 +24,10 @@ class SearchResultViewModel: ViewModel() {
     val status: LiveData<LoadingStatus> = _status
 
     fun initDrinkListSearch(args: SearchResultFragmentArgs) {
-        val browsers = mutableListOf<Browser>()
 
         // TODO DBBrowser not yet implemented
-        //if (args.searchLocal) browsers.add(DBBrowser())
-        if (args.searchOnline) browsers.add(CocktailAPIBrowser())
-        dataCollector = MultipleSourceDataCollector(browsers)
+        //if (args.searchLocal) dataCollector.addBrowser(DBBrowser())
+        if (args.searchOnline) dataCollector.addBrowser(CocktailAPIBrowser())
 
         // This means the search was already done before (user navigated up), we don't need it
         if (status.value == LoadingStatus.Loading) {

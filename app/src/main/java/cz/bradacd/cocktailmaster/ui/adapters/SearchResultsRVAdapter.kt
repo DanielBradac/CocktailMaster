@@ -17,17 +17,13 @@ class SearchResultsRVAdapter(
     private val drinks: List<DisplayableDrink>,
     args: SearchResultFragmentArgs
 ): RecyclerView.Adapter<SearchResultsRVAdapter.ItemViewHolder>() {
-
-    private var dataCollector: MultipleSourceDataCollector
+    // We need data collector for collecting images
+    private var dataCollector = MultipleSourceDataCollector()
 
     init {
-        // We need data collector for collecting images
-        val browsers = mutableListOf<Browser>()
-
         // TODO DBBrowser not yet implemented
-        //if (args.searchLocal) browsers.add(DBBrowser())
-        if (args.searchOnline) browsers.add(CocktailAPIBrowser())
-        dataCollector = MultipleSourceDataCollector(browsers)
+        //if (args.searchLocal) dataCollector.addBrowser(DBBrowser())
+        if (args.searchOnline) dataCollector.addBrowser(CocktailAPIBrowser())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {

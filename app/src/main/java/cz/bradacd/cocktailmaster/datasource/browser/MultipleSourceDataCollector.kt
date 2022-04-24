@@ -10,8 +10,11 @@ import kotlinx.coroutines.*
 // This class collects data from all the browsers it gets in constructor and merge them together
 // TODO tady se bude opakovat kód, chtělo by to nějak zobecnit
 // TODO otestovat jak funguje ensureActive
-class MultipleSourceDataCollector(private val browsers: List<Browser>) {
+class MultipleSourceDataCollector() {
     private val logTag = "DataCollector"
+    private val browsers = mutableListOf<Browser>()
+
+    fun addBrowser(browser: Browser) = browsers.add(browser)
 
     suspend fun collectIngredientsByName(name: String): List<DisplayableIngredient> {
         return coroutineScope {

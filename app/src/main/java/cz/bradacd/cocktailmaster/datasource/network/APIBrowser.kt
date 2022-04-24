@@ -119,10 +119,7 @@ class CocktailAPIBrowser() : Browser {
     }
 
     companion object {
-        fun testApi(): Boolean {
-            // TODO Otestovat api - tady by šlo volat www.thecocktaildb.com/api/json/v1/1/list.php?a=list
-            return true
-        }
+        suspend fun isApiAvailable(): Boolean = CocktailApi.isAPIAvailable()
     }
 }
 

@@ -24,6 +24,9 @@ interface CocktailApiCalls {
 
     @GET(APIConstants.LOOKUP)
     suspend fun getDrinkDetail(@Query("i") id: String): DrinksDetailed
+
+    @GET(APIConstants.TEST)
+    suspend fun testAPI(): APITest
 }
 
 object CocktailApi {
@@ -63,5 +66,10 @@ object CocktailApi {
             return null
         }
         return drinks[0]
+    }
+
+    suspend fun isAPIAvailable(): Boolean {
+        val testCall = retrofitService.testAPI()
+        return !testCall.entities.isNullOrEmpty()
     }
 }

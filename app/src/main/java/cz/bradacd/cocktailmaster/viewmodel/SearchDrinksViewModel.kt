@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.bradacd.cocktailmaster.common.DrinkCategory
+import cz.bradacd.cocktailmaster.datasource.browser.Browser
 import cz.bradacd.cocktailmaster.datasource.browser.MultipleSourceDataCollector
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrink
 import cz.bradacd.cocktailmaster.datasource.network.CocktailAPIBrowser
@@ -29,19 +30,22 @@ class SearchDrinksViewModel: ViewModel() {
     private var _progressBarVisibility = MutableLiveData(View.GONE)
     val progressBarVisibility = _progressBarVisibility
 
-    val apiAvailable = CocktailAPIBrowser.testApi()
-
-    private val dataCollector: MultipleSourceDataCollector
-
-    init {
-        // TODO checknout jestli se připojíme k api a podle toho kdyžtak vynechat APIbrowser
-        dataCollector = MultipleSourceDataCollector(listOf(CocktailAPIBrowser()))
-    }
+    private var apiAvailable: Boolean = false
+    private val dataCollector = MultipleSourceDataCollector()
 
     // Handle possible error inside retrofit - catch block wouldn't get it
     // TODO vyrobit si nějaký error handeling na tyhle případy
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
         Log.e(logTag, throwable.stackTraceToString())
+    }
+
+    init {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            apiAvailable = CocktailAPIBrowser.isApiAvailable()
+            if (apiAvailable) {
+                dataCollector.addBrowser(CocktailAPIBrowser())
+            }
+        }
     }
 
     fun updateSuggestionList(name: String) {
