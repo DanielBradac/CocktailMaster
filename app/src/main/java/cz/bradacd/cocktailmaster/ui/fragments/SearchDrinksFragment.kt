@@ -1,6 +1,7 @@
 package cz.bradacd.cocktailmaster.ui.fragments
 
 import android.R.layout.simple_list_item_1
+import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -70,10 +71,8 @@ class SearchDrinksFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // TODO zobrazit chybu a zablokovat online search, pokud je viewmodel.apiAvailable false
-
         // Observe changes in ingredients suggestions data and change suggestion accordingly
-        this.viewModel.ingredientSuggestion.observe(viewLifecycleOwner) { newSuggestions ->
+        viewModel.ingredientSuggestion.observe(viewLifecycleOwner) { newSuggestions ->
             if (newSuggestions.isNullOrEmpty()) {
                 binding.addIngredientsAutocomplete.error = "No ingredients found"
             }
@@ -83,6 +82,17 @@ class SearchDrinksFragment : Fragment() {
                 addAll(newSuggestions)
                 // We show whole new list, because it is already filtered from the data fetch
                 filter.filter(null)
+            }
+        }
+        // Observe if the API is available and block online search if it is not
+        viewModel.apiAvailable.observe(viewLifecycleOwner) { apiAvailable ->
+            binding.onlineSwitch.isEnabled = true
+            binding.statusBar.root.visibility = View.GONE
+            if (!apiAvailable) {
+                binding.onlineSwitch.isChecked = false
+                binding.onlineSwitch.isEnabled = false
+                binding.statusBar.statusText.text = getString(R.string.error_internet_connection)
+                binding.statusBar.root.visibility = View.VISIBLE
             }
         }
     }

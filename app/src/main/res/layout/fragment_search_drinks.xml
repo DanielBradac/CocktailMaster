@@ -30,6 +30,14 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="Online search"
+            app:layout_constraintBottom_toTopOf="@+id/status_bar"
+            app:layout_constraintStart_toStartOf="@+id/left_guideline" />
+
+        <include
+            android:id="@+id/status_bar"
+            layout="@layout/status_bar"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
             app:layout_constraintBottom_toTopOf="@+id/search_button"
             app:layout_constraintStart_toStartOf="@+id/left_guideline" />
 
@@ -106,6 +114,7 @@
             android:indeterminate="true"
             app:layout_constraintStart_toEndOf="@id/add_ingredients_autocomplete"
             app:layout_constraintTop_toBottomOf="@+id/cocktail_name" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

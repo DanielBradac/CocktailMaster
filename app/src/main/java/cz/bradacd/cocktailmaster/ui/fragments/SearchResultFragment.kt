@@ -67,20 +67,19 @@ class SearchResultFragment : Fragment() {
             binding.searchResultRv.adapter!!.notifyItemRangeInserted(0, drinkList.size)
         }
 
-        // Create/update status bar text
-        var statusTextFormat =
-            String.format(getString(R.string.search_result_count), drinkList.size)
+        // Update status bar text with result
+        binding.statusBar.statusText.text = String.format(getString(R.string.search_result_count), drinkList.size)
         if (drinkList.size >= onlineSearchLimit) {
-            statusTextFormat += "\n" + getString(R.string.search_result_warning)
+            binding.statusBar.warningText.text = getString(R.string.search_result_warning)
+            binding.statusBar.warningText.visibility = View.VISIBLE
         }
-        binding.statusText.text = statusTextFormat
     }
 
     private fun errorDataFetch(status: LoadingStatus.Error) {
-        binding.statusText.text = getString(status.errorMessageResource)
+        binding.statusBar.statusText.text = getString(status.errorMessageResource)
     }
 
     private fun loadingDataFetch() {
-        binding.statusText.text = getString(R.string.search_result_loading)
+        binding.statusBar.statusText.text = getString(R.string.search_result_loading)
     }
 }
