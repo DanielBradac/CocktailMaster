@@ -48,4 +48,26 @@
             android:name="dataSourceTag"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/drinkDetailDataFragment"
+        android:name="cz.bradacd.cocktailmaster.ui.fragments.DrinkDetailDataFragment"
+        android:label="DrinkDetailDataFragment" >
+        <argument
+            android:name="drinkId"
+            app:argType="string" />
+        <argument
+            android:name="dataSourceTag"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/drinkDetailNotesFragment"
+        android:name="cz.bradacd.cocktailmaster.ui.fragments.DrinkDetailNotesFragment"
+        android:label="DrinkDetailNotesFragment" >
+        <argument
+            android:name="drinkId"
+            app:argType="string" />
+        <argument
+            android:name="dataSourceTag"
+            app:argType="string" />
+    </fragment>
 </navigation>

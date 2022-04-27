@@ -10,13 +10,12 @@ import cz.bradacd.cocktailmaster.common.getErrorRes
 import cz.bradacd.cocktailmaster.datasource.browser.Browser
 import cz.bradacd.cocktailmaster.datasource.browser.createBrowserFromTag
 import cz.bradacd.cocktailmaster.datasource.displayable.DisplayableDrinkDetail
-import cz.bradacd.cocktailmaster.ui.fragments.DrinkDetailFragmentArgs
+import cz.bradacd.cocktailmaster.ui.fragments.DrinkDetailDataFragmentArgs
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class DrinkDetailViewModel: ViewModel() {
-
+class DrinkDetailDataViewModel: ViewModel() {
     private val _status = MutableLiveData<LoadingStatus>(LoadingStatus.Loading)
     val status: LiveData<LoadingStatus> = _status
 
@@ -25,14 +24,13 @@ class DrinkDetailViewModel: ViewModel() {
     private val _drinkDetail = MutableLiveData<DisplayableDrinkDetail>()
     val drinkDetail: LiveData<DisplayableDrinkDetail> = _drinkDetail
 
-
     // Handle possible error inside retrofit - catch block wouldn't get it
     // TODO vyrobit si nějaký error handeling na tyhle případy
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
         _status.value = throwable.localizedMessage?.let { LoadingStatus.Error(getErrorRes(throwable)) }
     }
 
-    fun initDrinkDetailSearch(args: DrinkDetailFragmentArgs) {
+    fun initDrinkDetailSearch(args: DrinkDetailDataFragmentArgs) {
         try {
             browser = createBrowserFromTag(args.dataSourceTag)
             viewModelScope.launch(coroutineExceptionHandler) {
